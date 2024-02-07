@@ -1,0 +1,80 @@
+SG = FLAG
+GS = FAIXA DE VELOCIDADE
+
+PASSAR SOBRE TODOS OS GS, ESTÁ ERRADO AS FAIXAS NA INFORMAÇÕES
+>SGS02000001< //VELOCIDADE PARA MOTOR OCIOSO
+
+FALAR SOBRE A GS00, EXCESSO DE VELOCIDADE (SEM CHUVA)
+
+FALAR SOBRE A GS02, MOTOR OCIOSO
+
+FALAR SOBRE A GS03, MARCHA LENTA
+
+PERGUNTAR SOBRE ++ E --, USAR EXEMPLO DO MOTOR OCIOSO, EVENTO SED033 E SED036
+USAR UT03 E UT06
+
+-------------------------------------------------------------------------------------------------------------------------
+
+OQUE SIGNIFICA SUBIR UMA FLAG P/ A PLATAFORMA ?
+SERIA O MESMO QUE DAR UM NOME PARA AQUELE EVENTO NA PLATAFORMA?
+
+-------------------------------------------------------------------------------------------------------------------------
+
+TD05, TEM SETADO EM DOIS LUGARES DO CÓDIGO
+A LEITURA É FEITA DE BAIXO P/ CIMA ? SE SIM, O TD05 ATÉ O MOMENTO É 300 SEGUNDOS
+*APAGA RPM APOS 5 SEGUNDOS
+>STD060005<
+>SED080 TD05++ +- SGN NN {SCT09 0}<
+
+Porque a variavel do RPM precisa ser zerada a cada 5 segundos ?
+
+-------------------------------------------------------------------------------------------------------------------------
+
+REPETIÇÃO DE CÓDIGO EVENTOS ED033 E ED034
+REPETIÇÃO DE CÓDIGO EVENTOS ED040 E ED041
+
+-------------------------------------------------------------------------------------------------------------------------
+
+//SED036 = SE A VELOCIDADE ESTIVER ENTRE 0 E 1KM/H OU A IGNIÇÃO ESTIVER DESLIGADA, CONDICIONAL FLAG05 ALTA
+//ZERA O CC03, ABAIXA A FLAG05 E DESLIGA O BUZZER
+DUVIDA: PQ TEM OUTRO COMANDO PARA BAIXAR A FLAG? LOGO ABAIXO DO EVENTO? SED026 E SED036
+>SED036 GS02--||IN07-- SG05++ GF0 V0 {SCC03 0}{SSH050}{SSXP00}<
+>SSH050< 
+
+-------------------------------------------------------------------------------------------------------------------------
+
+//QAC - Consulta de aceleração por velocidade - LEMBRAR DE VER O SCRIPT 1.4PADRÃO
+>SUT28,QAC,4,5,-9999,-10<
+>SUT29,QAC,4,5,+10,+9999<
+
+>SED059 UT28++ IN07++&&UT19-- GF0 V0 {PFL,abrusca}< //ACELERAÇÃO BRUSCA - POR ACELERÔMETRO
+>SED060 UT29++ IN07++&&UT19-- GF0 V0 {PFL,frbrusca}< //FRENAGEM BRUSCA - POR ACELERÔMETRO
+
+-------------------------------------------------------------------------------------------------------------------------
+
+SED066
+SUT30
+
+CURVA BRUSCA - É CORRETO AFIRMAR QUE SE O EIXO X ESTÁ FORA DA FAIXA, -40 E 40 O EVENTO SERÁ DISPARADO?
+
+SUT12 - NAO ESTÁ SENDO SETADO, POREM FOI CHAMADO EM VARIAS PARTES DO CÓDIGO QUE UTILIZA COMO CONDICIONAL &&,
+OU SEJA, O EVENTO NUNCA VAI ACONTECER PORQUE A CONDICIONAL NUNCA SERÁ VERDADEIRA.
+
+-------------------------------------------------------------------------------------------------------------------------
+
+SED086
+
+OQUE SIGNIFICA O DISPARADOR IO03++ E RC00++
+
+{STB100,PLN00000,4,5} = LIMPAR LOGIN DO CONDUTOR ?
+
+-------------------------DUVIDAS DEPOIS DA REUNIÃO------------------------------------------------------------------------
+
+PQ É NECESSARIO FICAR ZERANDO A VARIAVEL DO RPM A CADA 5SEGUNDOS?
+***APAGA RPM APOS 5 SEGUNDOS**
+>STD060005<
+>SED080 TD06++ +- SGN NN {SCT09 0}<
+
+---------
+TD01 NÃO EXISTE, OU SEJA, O EVENTO 58 NUNCA SERA EXECUTADO
+>SED058 TD01++ BF17-- GR0 TT<
